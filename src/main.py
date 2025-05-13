@@ -1,5 +1,4 @@
-from src import widget, masks
-
+from src import masks, widget
 
 if __name__ == "__main__":
     print(masks.get_mask_account("7000792289606361"))
