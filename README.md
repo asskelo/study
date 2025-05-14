@@ -1,5 +1,7 @@
 ![Python 3.13](https://img.shields.io/badge/python-3.13-blue)
 ![Poetry 2.1.3](https://img.shields.io/badge/poetry-2.1.3-yellow)
+![Pytest 8.3.5](https://img.shields.io/badge/pytest-8.3.5-yellow)
+![Pytest-cov 6.1.1](https://img.shields.io/badge/pytest_cov-6.1.1-yellow)
 
 # Учебный проект: Банковские операции пользователя
 
