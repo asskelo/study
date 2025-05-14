@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Dict, List
 
 
@@ -41,4 +42,17 @@ def sort_by_date(operations: List[Dict], reverse_date_operation: bool = True) ->
         Новый список операций, отсортированный по дате.
     """
 
-    return sorted(operations, key=lambda operation: operation.get('date', ''), reverse=reverse_date_operation)
+    for operation in operations:
+        date_str = operation.get("date")
+        if date_str is None:
+            raise ValueError("Поля 'date' нет")
+        try:
+            datetime.fromisoformat(date_str)
+        except (ValueError, TypeError):
+            raise ValueError(f"Неверный формат даты: {date_str}")
+
+    return sorted(
+        operations,
+        key=lambda operation: datetime.fromisoformat(operation.get("date", "0001-01-01")),
+        reverse=reverse_date_operation,
+    )
