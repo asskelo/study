@@ -22,6 +22,7 @@ def get_mask_card_number(card_number: str) -> str:
     masked = prefix + masked_middle + suffix
 
     blocks = [masked[i : i + CARD_BLOCK_SIZE] for i in range(0, len(masked), CARD_BLOCK_SIZE)]
+
     return " ".join(blocks)
 
 
@@ -35,4 +36,5 @@ def get_mask_account(account_number: str) -> str:
         raise ValueError("Неправильный формат номера счета")
 
     suffix = digits[-ACCOUNT_VISIBLE_SUFFIX:]
+
     return f"**{suffix}"
