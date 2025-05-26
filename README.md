@@ -70,12 +70,14 @@ study/
 ├── poetry.lock             # Зафиксированные версии зависимостей
 ├── src/                    # Пакет с реализацией
 │   ├── __init__.py
+│   ├── generators.py       # Генераторы для транзакций
 │   ├── masks.py            # Модуль маскировки счета\банковской карты
 │   ├── processing.py       # Модуль сортировки операций и дат
 │   └── widget.py           # Модуль обработки счетов\банковских карт
 ├── tests/                  # Пакет unit-тестов
 │   ├── __init__.py         
 │   ├── conftest.py         # Общие фикстуры для всех тестов
+│   ├── test_generators.py  # Тестирование модуля generators
 │   ├── test_masks.py       # Тестирование модуля masks 
 │   ├── test_processing.py  # Тестирование модуля processing
 │   └── test_widget.py      # Тестирование модуля widget
@@ -86,7 +88,7 @@ study/
 
 ## Примеры использования:
 ```Python
-from src import masks, processing, widget
+from src import masks, processing, widget, generators
 
 print(masks.get_mask_account("7000792289606361"))                 #-> **6361
 print(widget.mask_account_card("Visa Platinum 8990922113665229")) #-> Visa Platinum 8990 92** **** 5229
@@ -125,6 +127,47 @@ print(
 #{'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'}, 
 #{'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}, 
 #{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'}]
+
+transactions = [
+    {
+        "id": 1,
+        "operationAmount": {"amount": "100.00", "currency": {"code": "USD"}},
+        "description": "Покупка",
+    },
+       {
+        "id": 2,
+        "operationAmount": {"amount": "50_000.00", "currency": {"code": "RUB"}},
+        "description": "Перевод",
+    },
+       {
+        "id": 3,
+        "operationAmount": {"amount": "432.00", "currency": {"code": "EUR"}},
+        "description": "Покупка",
+    }
+]
+
+for transaction in generators.filter_by_currency(transactions, "USD"):
+    print(transaction)
+
+
+# {'id': 1, 'operationAmount': {'amount': '100.00', 'currency': {'code': 'USD'}}, 'description': 'Покупка'}
+
+for description in generators.transaction_descriptions(transactions):
+    print(description)
+
+# Вывод:
+# Покупка
+# Перевод
+# Покупка
+
+
+for card in generators.card_number_generator(1, 3):
+    print(card)
+
+# Вывод:
+# 0000 0000 0000 0001
+# 0000 0000 0000 0002
+# 0000 0000 0000 0003
 ```
 
 ## Тестирование
