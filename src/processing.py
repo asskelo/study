@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Dict, List
+from typing import Any, Dict, List
 
 
-def filter_by_state(operations: List[Dict], state: str = "EXECUTED") -> List[Dict]:
+def filter_by_state(operations: List[Dict[str, Any]], state: str = "EXECUTED") -> List[Dict[str, Any]]:
     """
     Отфильтровывает список операций по значению ключа "state".
 
@@ -25,20 +25,20 @@ def filter_by_state(operations: List[Dict], state: str = "EXECUTED") -> List[Dic
     return [operation for operation in operations if operation.get('state') == state]
 
 
-def sort_by_date(operations: List[Dict], reverse_date_operation: bool = True) -> List[Dict]:
+def sort_by_date(operations: List[Dict[str, Any]], reverse_date_operation: bool = True) -> List[Dict[str, Any]]:
     """
     Сортирует список операций по полю "date".
 
     Параметры:
 
-    operations : List[Dict]
+    operations : List[Dict[str, Any]]
         Принимает список словарей, в котором каждый словарь это денежная операция.
     reverse_date_operation: bool = True
         По умолчанию сортирует от самых новых к самым старым (reverse_date_operation=True).
     Можно передать reverse_date_operation=False, чтобы получить порядок от старых к новым.
 
     Возвращает:
-    List[Dict]
+    List[Dict[str, Any]]
         Новый список операций, отсортированный по дате.
     """
 
@@ -53,6 +53,6 @@ def sort_by_date(operations: List[Dict], reverse_date_operation: bool = True) ->
 
     return sorted(
         operations,
-        key=lambda operation: datetime.fromisoformat(operation.get("date", "0001-01-01")),
+        key=lambda sort_operation: datetime.fromisoformat(sort_operation.get("date", "0001-01-01")),
         reverse=reverse_date_operation,
     )
