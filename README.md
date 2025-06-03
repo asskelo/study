@@ -34,6 +34,7 @@
 
 - Маскировка счета\банковской карты пользователя.
 - Сортировка операций по дате и статусу выполнения операции.
+- Логирование функций
 
 ---
 
@@ -88,11 +89,12 @@ study/
 
 ## Примеры использования:
 ```Python
-from src import masks, processing, widget, generators
+from src import generators, masks, processing, widget
+from src.decorators import log
 
-print(masks.get_mask_account("7000792289606361"))                 #-> **6361
-print(widget.mask_account_card("Visa Platinum 8990922113665229")) #-> Visa Platinum 8990 92** **** 5229
-print(widget.get_date("2024-03-11T02:26:18.671407"))              #-> 11.03.2024
+print(masks.get_mask_account("7000792289606361"))  # -> **6361
+print(widget.mask_account_card("Visa Platinum 8990922113665229"))  # -> Visa Platinum 8990 92** **** 5229
+print(widget.get_date("2024-03-11T02:26:18.671407"))  # -> 11.03.2024
 
 print(
     processing.filter_by_state(
@@ -106,9 +108,9 @@ print(
     )
 )
 
-#Вывод:
-#[{'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'}, 
-#{'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}]
+# Вывод:
+# [{'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
+# {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}]
 
 print(
     processing.sort_by_date(
@@ -122,11 +124,11 @@ print(
     )
 )
 
-#Вывод:
-#[{'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'}, 
-#{'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'}, 
-#{'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}, 
-#{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'}]
+# Вывод:
+# [{'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
+# {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
+# {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
+# {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'}]
 
 transactions = [
     {
@@ -134,16 +136,16 @@ transactions = [
         "operationAmount": {"amount": "100.00", "currency": {"code": "USD"}},
         "description": "Покупка",
     },
-       {
+    {
         "id": 2,
         "operationAmount": {"amount": "50_000.00", "currency": {"code": "RUB"}},
         "description": "Перевод",
     },
-       {
+    {
         "id": 3,
         "operationAmount": {"amount": "432.00", "currency": {"code": "EUR"}},
         "description": "Покупка",
-    }
+    },
 ]
 
 for transaction in generators.filter_by_currency(transactions, "USD"):
@@ -168,6 +170,15 @@ for card in generators.card_number_generator(1, 3):
 # 0000 0000 0000 0001
 # 0000 0000 0000 0002
 # 0000 0000 0000 0003
+
+
+@log(filename="mylog.txt")
+def my_function(x: int, y: int) -> int:
+    return x + y
+
+
+my_function(1, 2)  # запишет в mylog.txt: "my_function ok"
+
 ```
 
 ## Тестирование
