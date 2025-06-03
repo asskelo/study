@@ -71,6 +71,7 @@ study/
 ├── poetry.lock             # Зафиксированные версии зависимостей
 ├── src/                    # Пакет с реализацией
 │   ├── __init__.py
+│   ├── decorators.py       # Декораторы функций
 │   ├── generators.py       # Генераторы для транзакций
 │   ├── masks.py            # Модуль маскировки счета\банковской карты
 │   ├── processing.py       # Модуль сортировки операций и дат
@@ -78,6 +79,7 @@ study/
 ├── tests/                  # Пакет unit-тестов
 │   ├── __init__.py         
 │   ├── conftest.py         # Общие фикстуры для всех тестов
+│   ├── test_decorators.py  # Тестирование модуля decorators
 │   ├── test_generators.py  # Тестирование модуля generators
 │   ├── test_masks.py       # Тестирование модуля masks 
 │   ├── test_processing.py  # Тестирование модуля processing
