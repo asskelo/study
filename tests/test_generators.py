@@ -41,9 +41,7 @@ def test_transaction_descriptions_missing_description():
     Проверяет, что при отсутствии поля 'description' в транзакции
     генератор бросает ValueError.
     """
-    transactions_missing_description = [
-        {"id": 1, "operationAmount": {"currency": {"code": "USD"}}}
-    ]
+    transactions_missing_description = [{"id": 1, "operationAmount": {"currency": {"code": "USD"}}}]
     with pytest.raises(ValueError):
         next(transaction_descriptions(transactions_missing_description))
 
