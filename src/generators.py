@@ -18,8 +18,7 @@ def filter_by_currency(transactions: List[Dict[str, Any]], code: str) -> Iterato
         try:
             currency_code = transaction["operationAmount"]["currency"]["code"]
         except (KeyError, TypeError) as e:
-            print(f"Ошибка при обработке транзакции "
-                  f"{transaction.get('id')}: {e}")
+            print(f"Ошибка при обработке транзакции " f"{transaction.get('id')}: {e}")
             continue
         if currency_code == code:
             yield transaction
@@ -63,5 +62,5 @@ def card_number_generator(start: int, stop: int) -> Iterator[str]:
         return
     for number in range(start, stop + 1):
         number_str = str(number).zfill(LENGTH)
-        blocks = [number_str[i:i+4] for i in range(0, LENGTH, 4)]
+        blocks = [number_str[i : i + 4] for i in range(0, LENGTH, 4)]
         yield " ".join(blocks)
