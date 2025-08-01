@@ -35,6 +35,7 @@
 - Маскировка счета\банковской карты пользователя.
 - Сортировка операций по дате и статусу выполнения операции.
 - Логирование функций
+- Реализован функционал конвертации валют.
 
 ---
 
@@ -72,6 +73,8 @@ study/
 ├── src/                    # Пакет с реализацией
 │   ├── __init__.py
 │   ├── decorators.py       # Декораторы функций
+│   ├── external_api.py     # Модуль конвертации валюты через API
+│   ├── utils.py            # Модуль чтения JSON файлов.
 │   ├── generators.py       # Генераторы для транзакций
 │   ├── masks.py            # Модуль маскировки счета\банковской карты
 │   ├── processing.py       # Модуль сортировки операций и дат
@@ -84,6 +87,7 @@ study/
 │   ├── test_masks.py       # Тестирование модуля masks 
 │   ├── test_processing.py  # Тестирование модуля processing
 │   └── test_widget.py      # Тестирование модуля widget
+├── .env.example            # Шаблон файла.env с указанием названий всех переменных, необходимых для работы приложения.
 └── .gitignore              # Игнорируемые файлы Git
 ```
 
@@ -91,7 +95,7 @@ study/
 
 ## Примеры использования:
 ```Python
-from src import generators, masks, processing, widget
+from src import generators, masks, processing, widget, utils, external_api
 from src.decorators import log
 
 print(masks.get_mask_account("7000792289606361"))  # -> **6361
@@ -180,6 +184,29 @@ def my_function(x: int, y: int) -> int:
 
 
 my_function(1, 2)  # запишет в mylog.txt: "my_function ok"
+
+filepath = "data/operations.json"
+transactions = utils.read_json_file(filepath)
+if not transactions:
+    print("Нет транзакций или файл пустой/не найден.")
+
+for tx in transactions:
+    try:
+        rub_amount = external_api.convert_to_rub(tx)
+        print(f"Транзакция: {tx.get('description', 'Без описания')}, сумма в рублях: {rub_amount:.2f}")
+    except Exception as e:
+        print(f"Ошибка при обработке транзакции: {e}")
+        
+# Вывод:
+# Транзакция: Перевод организации, сумма в рублях: 31957.58
+# Транзакция: Перевод организации, сумма в рублях: 786038.10
+# Транзакция: Открытие вклада, сумма в рублях: 48223.05
+# Транзакция: Перевод со счета на счет, сумма в рублях: 6330100.35
+# Транзакция: Перевод со счета на счет, сумма в рублях: 43318.34
+# Транзакция: Перевод организации, сумма в рублях: 657803.74
+# Ошибка при обработке транзакции: Неверный формат транзакции
+# ...
+
 
 ```
 

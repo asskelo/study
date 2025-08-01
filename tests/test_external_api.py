@@ -1,18 +1,16 @@
-import pytest
 from unittest.mock import patch
+
 from src.external_api import convert_to_rub
 
+
 def transaction(currency="USD", amount=10):
-    return {
-        "operationAmount": {
-            "amount": str(amount),
-            "currency": {"code": currency}
-        }
-    }
+    return {"operationAmount": {"amount": str(amount), "currency": {"code": currency}}}
+
 
 def test_convert_to_rub_rub():
     tx = transaction(currency="RUB", amount=123.45)
     assert convert_to_rub(tx) == 123.45
+
 
 @patch("src.external_api.requests.get")
 @patch("os.getenv", return_value="testkey")

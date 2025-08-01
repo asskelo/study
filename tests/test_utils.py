@@ -1,8 +1,9 @@
-import pytest
-from src.utils import read_json_file
-import tempfile
-import os
 import json
+import os
+import tempfile
+
+from src.utils import read_json_file
+
 
 def test_read_json_file_valid():
     data = [{"foo": "bar"}]
@@ -13,6 +14,7 @@ def test_read_json_file_valid():
     assert result == data
     os.remove(tmp_path)
 
+
 def test_read_json_file_empty():
     with tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8") as tmp:
         tmp.write("")
@@ -20,6 +22,7 @@ def test_read_json_file_empty():
     result = read_json_file(tmp_path)
     assert result == []
     os.remove(tmp_path)
+
 
 def test_read_json_file_not_list():
     with tempfile.NamedTemporaryFile("w", delete=False, encoding="utf-8") as tmp:
